@@ -1,0 +1,264 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:600,700"
+      rel="stylesheet"
+    />
+    <title>Multifunctional calculator</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #78c1f3;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container {
+        background: #ffffff;
+        padding: 25px;
+        width: 450px;
+        border-radius: 10px;
+      }
+
+      .container h3 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .text-area {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 30px;
+        padding-left: 20px;
+        margin-bottom: 25px;
+        color: black;
+      }
+
+      .text-area input {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        color: black;
+        padding: 15px 0;
+        font-size: 18px;
+        text-align: center;
+      }
+
+      .text-area img {
+        height: 30px;
+        margin-right: 3%;
+        cursor: pointer;
+      }
+
+      .password-length {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 5px;
+        margin-bottom: 25px;
+      }
+
+      .password-length input[type="range"] {
+        width: 100%;
+      }
+      .password-length input[type="number"] {
+        width: 55px;
+        padding: 5px 0;
+        text-align: center;
+        font-size: 18px;
+        border: none;
+        outline: none;
+        font-weight: 500;
+      }
+
+      .checkBox-list .options {
+        display: flex;
+        flex-wrap: wrap;
+        height: 35px;
+        align-content: center;
+        cursor: pointer;
+      }
+
+      .checkBox-list .options input {
+        margin-right: 10px;
+        margin-top: 4px;
+        height: 18px;
+        width: 18px;
+        cursor: pointer;
+      }
+
+      .generatePassword {
+        width: 100%;
+        font-size: 16px;
+        background: #78c1f3;
+        color: #000000;
+        border: none;
+        outline: none;
+        padding: 3%;
+        border-radius: 30px;
+        font-weight: 500;
+        cursor: pointer;
+        text-transform: uppercase;
+        margin-top: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h3>GENERATE A STRONG PASSWORD!</h3>
+      <!-- Inside the container will add an HTML elements.-->
+      <div class="text-area">
+        <input type="text" id="strongPasswordValue" value="PASSWORD" disabled />
+        <img
+          src="/images/copy.png"
+          id="CopySuccess"
+          onclick="CopyStrongPassword()"
+        />
+      </div>
+
+      <div class="password-length">
+        <input
+          type="range"
+          id="rangeInput"
+          min="6"
+          max="25"
+          value="8"
+          oninput="rangeValue.value = this.value"
+        />
+        <input
+          type="number"
+          id="rangeValue"
+          min="6"
+          max="25"
+          value="8"
+          oninput="rangeInput.value = this.value"
+        />
+      </div>
+
+      <div class="checkBox-list">
+        <label class="options" for="Uppercase"
+          ><input id="Uppercase" type="checkbox" value="Uppercase" checked />
+          Include Uppercase Letters (A-Z)</label
+        >
+        <label class="options" for="Lowercase"
+          ><input id="Lowercase" type="checkbox" value="Lowercase" /> Include
+          Lowercase Letters (a-z)</label
+        >
+        <label class="options" for="Numbers"
+          ><input id="Numbers" type="checkbox" value="Numbers" /> Include
+          Numbers (0-9)</label
+        >
+        <label class="options" for="Symbols"
+          ><input id="Symbols" type="checkbox" value="Symbols" /> Include
+          Symbols (@-$)</label
+        >
+        <label class="options" for="Duplicate"
+          ><input id="Duplicate" type="checkbox" value="Duplicate" /> Exclude
+          Duplicate Characters</label
+        >
+      </div>
+      <button class="generatePassword">Generate Password</button>
+    </div>
+
+    <script>
+      const passwordInput = document.getElementById("strongPasswordValue");
+      const copySuccess = document.getElementById("CopySuccess");
+      const rangeInput = document.getElementById("rangeInput");
+      const rangeValue = document.getElementById("rangeValue");
+      const generatePassword = document.querySelector(".generatePassword");
+      const options = document.querySelectorAll(".options input");
+      for (const opt of options) {
+        opt.addEventListener("click", generateStrongPassword);
+      }
+
+      const Characters = {
+        Uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        Lowercase: "abcdefghijklmnopqrstuvwxyz",
+        Numbers: "0123456789",
+        Symbols: "~!@#$%^&*()_+{}[].,:;|",
+      };
+
+      function CopyStrongPassword() {
+        if (passwordInput.value !== "") {
+          copySuccess.setAttribute("src", "/images/tick.png");
+          navigator.clipboard.writeText(passwordInput.value);
+
+          setTimeout(function () {
+            copySuccess.setAttribute("src", "/images/copy.png");
+          }, 2000);
+        }
+      }
+
+      generatePassword.addEventListener("click", generateStrongPassword);
+      function generateStrongPassword() {
+        let randomPassword = "",
+          strongPassword = "",
+          excludeDuplicate = false;
+
+        options.forEach((option) => {
+          if (option.checked && option.id !== "Duplicate") {
+            randomPassword += Characters[option.id];
+          }
+          if (option.checked && option.id === "Duplicate") {
+            excludeDuplicate = true;
+          }
+        });
+
+        if (randomPassword !== "") {
+          if (excludeDuplicate && randomPassword.length < rangeInput.value) {
+            alert(
+              "We Can't get password without Duplicate for selected options and length!"
+            );
+            passwordInput.value = "";
+          } else {
+            for (let i = 0; i < rangeInput.value; i++) {
+              let charAt =
+                randomPassword[
+                  Math.floor(Math.random() * randomPassword.length)
+                ];
+              if (excludeDuplicate) {
+                !strongPassword.includes(charAt)
+                  ? (strongPassword += charAt)
+                  : i--;
+              } else {
+                strongPassword += charAt;
+              }
+            }
+            passwordInput.value = strongPassword;
+          }
+        } else {
+          passwordInput.value = "";
+        }
+      }
+
+      rangeInput.addEventListener("input", setPasswordIndicator);
+      rangeValue.addEventListener("input", setPasswordIndicator);
+
+      function setPasswordIndicator() {
+        let indicator =
+          rangeInput.value <= 8
+            ? "weak"
+            : rangeInput.value <= 16
+            ? "medium"
+            : "strong";
+        passwordInput.parentElement.id = indicator;
+        passwordInput.parentElement.title = "Your password is " + indicator;
+        generateStrongPassword();
+      }
+    </script>
+  </body>
+</html>
