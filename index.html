@@ -124,7 +124,7 @@
       <div class="text-area">
         <input type="text" id="strongPasswordValue" value="PASSWORD" disabled />
         <img
-          src="/images/copy.png"
+          src="copy.png"
           id="CopySuccess"
           onclick="CopyStrongPassword()"
         />
@@ -194,11 +194,11 @@
 
       function CopyStrongPassword() {
         if (passwordInput.value !== "") {
-          copySuccess.setAttribute("src", "/images/tick.png");
+          copySuccess.setAttribute("src", "tick.png");
           navigator.clipboard.writeText(passwordInput.value);
 
           setTimeout(function () {
-            copySuccess.setAttribute("src", "/images/copy.png");
+            copySuccess.setAttribute("src", "copy.png");
           }, 2000);
         }
       }
