@@ -122,7 +122,7 @@
       <h3>GENERATE A STRONG PASSWORD!</h3>
       <!-- Inside the container will add an HTML elements.-->
       <div class="text-area">
-        <input type="text" id="strongPasswordValue" value="PASSWORD" disabled />
+        <input type="text" id="strongPasswordValue" value="PASSWORD" disabled style="background-color: rgb(61, 190, 22);"/>
         <img
           src="copy.png"
           id="CopySuccess"
@@ -251,10 +251,10 @@
       function setPasswordIndicator() {
         let indicator =
           rangeInput.value <= 8
-            ? "weak"
+            ? passwordInput.setAttribute('style', 'background-color: rgba(238, 36, 36, 0.925)')
             : rangeInput.value <= 16
-            ? "medium"
-            : "strong";
+            ? passwordInput.setAttribute('style', 'background-color: rgb(253, 181, 0)')
+            : passwordInput.setAttribute('style', 'background-color: rgb(61, 190, 22)')
         passwordInput.parentElement.id = indicator;
         passwordInput.parentElement.title = "Your password is " + indicator;
         generateStrongPassword();
